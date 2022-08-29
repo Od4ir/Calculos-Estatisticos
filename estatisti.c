@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 void bubble_sort_bettter(double *V, int n);
 void frequencia_absoluta(double *V, int n);
-void media_aritmetica(double *V, int n);
-void mediana(double *V, int n) ;
-
+double media_aritmetica(double *V, int n);
+void mediana(double *V, int n);
+void variancia(double *V, int n);
 
 int main() {
     double *dados;
@@ -26,11 +27,12 @@ int main() {
     }
 
     frequencia_absoluta(dados, n);
-    media_aritmetica(dados, n);
+    printf("Média Aritmética - %.2lf\n", media_aritmetica(dados, n));
     mediana(dados, n);
+    variancia(dados, n);
+
     free(dados);
     fclose(arq);
-
     return 0;
 }
 
@@ -80,17 +82,30 @@ void frequencia_absoluta(double *V, int n) {
     }
 }
 
-void media_aritmetica(double *V, int n) {
+double media_aritmetica(double *V, int n) {
     double media = 0; int i;
     for(i = 0; i < n; i++) {
         media = media + V[i];
     }
-    printf("Média Aritmética - %.2lf\n", (media/n));
+    return (media/n);
 }
 
 void mediana(double *V, int n) {
     bubble_sort_bettter(V, n);
     if(n % 2 == 1) printf("Mediana - %.2lf\n", V[(n - 1)/2]);
     else printf("Mediana - %.2lf\n", ((V[(n - 1)/2] + V[n/2])/2));
+}
+
+void variancia(double *V, int n) {
+    double var = 0;
+    int i;
+
+    for(i = 0; i < n; i++) {
+        var = var + (V[i] - media_aritmetica(V, n))*(V[i] - media_aritmetica(V, n));
+    }
+    var = var/n;
+    printf("Variância - %.2lf\n", var);
+    var = sqrt(var);
+    printf("Desvio Padrão - %.2lf\n", var);
 }
 
